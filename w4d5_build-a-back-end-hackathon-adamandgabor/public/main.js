@@ -1,4 +1,4 @@
-const url = "";
+const url = "api";
 
 const recipesSection = document.querySelector("#recipes");
 const getRecipeButton = document.querySelector("#get-recipes");

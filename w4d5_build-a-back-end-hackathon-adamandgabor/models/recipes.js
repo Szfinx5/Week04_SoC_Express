@@ -39,18 +39,22 @@ export function updateRecipeByID(id, updatedRecipe) {
 
 // DELETE A RECIPE BY ID
 export function deleteRecipeByID(id) {
-  recipesRouter.delete("/:id", (req, res) => {
-    console.log("DELETE Request Called for /api endpoint");
-    //res.send("DELETE Request Called");
-    id = Number(req.params.id);
-    //recipes.splice(id, 1)
-    for (let i = 0; i < recipes.length; i++) {
-      if (id === recipes[i].id) {
-        recipes.splice(i, 1);
-      }
+  const returnObject = [...recipes.filter((r) => id !== r.id)];
+  const responseObject = { success: Boolean, payload: returnObject };
+  return responseObject;
+}
 
-      const responseObject = { success: Boolean, payload: recipes };
-      res.json(responseObject);
-    }
+// GET A RECIPE BY TITLE
+export function getRecipeByTitle(title) {
+  const returnObject = [...recipes.filter((r) => r.title.includes(title))];
+  return returnObject;
+}
+
+// GET A RECIPE BY INGREDIENT
+export function getRecipeByIngredient(ingredient) {
+  const returnObject = recipes.filter((recept) => {
+    console.log(recept.ingredients);
+    return recept.ingredients.find((r) => r.includes(ingredient));
   });
+  return returnObject;
 }

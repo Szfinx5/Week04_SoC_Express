@@ -8,84 +8,50 @@ import {
   createRecipe,
   updateRecipeByID,
   deleteRecipeByID,
+  getRecipeByTitle,
+  getRecipeByIngredient,
 } from "../models/recipes.js";
 
+// GET ALL RECIPES
 recipesRouter.get("/", function (req, res) {
+  //console.log(req.query);
+  if (req.query.title !== undefined) {
+    const title = req.query.title;
+    res.json(getRecipeByTitle(title));
+    return;
+  }
+  if (req.query.ingredient !== undefined) {
+    const ingredient = req.query.ingredient;
+    res.json(getRecipeByIngredient(ingredient));
+    return;
+  }
   res.json(getRecipes());
 });
 
+// GET A RECIPE BY ID
 recipesRouter.get("/:id", function (req, res) {
   const id = req.params.id;
   res.json(getRecipeByID(id));
 });
 
+// CREATE A RECIPE
 recipesRouter.post("/", function (req, res) {
   const body = req.body;
   res.json(createRecipe(body));
 });
 
+// UPDATE A RECIPE BY ID
 recipesRouter.put("/:id", function (req, res) {
   const id = req.params.id;
   let body = req.body;
   res.json(updateRecipeByID(id, body));
 });
 
-/*
-//http://localhost:3000/recipes/id route
-recipesRouter.get('/:id', function(req, res){
-    const id = req.params.id;
-    let searchedRecipes =[];
-    for(let i = 0;i < recipes.length; i++){
-        if (id == recipes[i].id){
-            searchedRecipes.push(recipes[i])
-            break;
-        }
-    }
-
-    const responseObject = {success: Boolean, payload: searchedRecipes }
-    res.json(responseObject)
-    });
-
-*/
-/*import { getRecipeByID } from '../models/recipes.js';
-
-getRecipeByID();*/
-
-/*
-//Updating a recipe using PUT
-recipesRouter.put('/:id', function(req, res){
-    const id = req.params.id;
-    let body = req.body;
-  
-    for(let i = 0;i < recipes.length; i++){
-        if (id == recipes[i].id){
-            recipes[i] = body;
-            break;
-        }
-    }
-
-    const responseObject = {success: Boolean, payload: recipes }
-    res.json(responseObject)
-    });
-*/
-
-/*
-    
-    recipesRouter.delete('/:id', (req, res) => {
-        console.log("DELETE Request Called for /api endpoint");
-        //res.send("DELETE Request Called");
-        const id = Number(req.params.id);
-        //recipes.splice(id, 1)
-    for(let i = 0; i < recipes.length; i++){
-        if (id === recipes[i].id){
-            recipes.splice(i, 1) 
-        }
-    
-        const responseObject = {success: Boolean, payload: recipes }
-        res.json(responseObject)
-        }});
-*/
-
-deleteRecipeByID();
+// DELETE A RECIPE BY ID
+recipesRouter.delete("/:id", (req, res) => {
+  console.log("DELETE Request Called for /api endpoint");
+  const id = Number(req.params.id);
+  res.json(deleteRecipeByID(id));
+});
 
 export { recipesRouter };
